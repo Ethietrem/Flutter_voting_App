@@ -1,0 +1,1 @@
+const AppName = "My Flutter Vote App";
