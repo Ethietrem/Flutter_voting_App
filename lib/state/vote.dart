@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vote_app/models/vote.dart';
-import 'package:flutter_vote_app/service.dart';
+import 'file:///C:/Users/Mati/AndroidStudioProjects/flutter_vote_app/lib/services/service.dart';
 
 class VoteState with ChangeNotifier{
   List<Vote> _voteList = List<Vote>();

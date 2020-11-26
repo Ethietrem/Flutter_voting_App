@@ -4,9 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:flutter_vote_app/models/vote.dart';
 import 'package:flutter_vote_app/state/vote.dart';
 
+/*
+            ekran wyswietlajacy ekran wynikow - wykres
+ */
+
 class Result extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {//tu jest wbudowanie okna wykresu
     return Container(
       padding: EdgeInsets.all(20),
       width: MediaQuery.of(context).size.width,
@@ -15,6 +19,7 @@ class Result extends StatelessWidget {
     );
   }
 
+  //tworzenie wykresu
   Widget createChart(BuildContext context){
     return charts.BarChart(
       retrieveVoteResult(context),
@@ -22,6 +27,7 @@ class Result extends StatelessWidget {
     );
   }
 
+  //pobranie wynikow glosowania i  przerobienie pod wysietlenie
   List<charts.Series<VoteData, String>> retrieveVoteResult(BuildContext context){
     Vote activeVote = Provider.of<VoteState>(context, listen: false).activeVote;
 
@@ -48,6 +54,7 @@ class Result extends StatelessWidget {
   }
 }
 
+//tu jest struktura glosowania
 class VoteData{
   final String option;
   final int total;

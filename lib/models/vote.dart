@@ -1,3 +1,4 @@
+//model systemu głosowania - unikatowy id, nazwa głosowania, opcje wyboru glosow
 class Vote {
   String voteId;
   String voteTitle;

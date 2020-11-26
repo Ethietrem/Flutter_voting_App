@@ -1,8 +1,11 @@
 import 'package:flutter_vote_app/state/vote.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vote_app/service.dart';
 import 'package:flutter_vote_app/models/vote.dart';
 import 'package:provider/provider.dart';
+
+/*
+          to jest obługa ekranu glosowania, pokazanie glosow oraz obsluga ich wyboru
+ */
 
 class VoteWidget extends StatelessWidget {
   @override
@@ -36,7 +39,7 @@ class VoteWidget extends StatelessWidget {
               onTap: (){
                 Provider.of<VoteState>(context).selectedOptionInActiveVote = option;
               },
-              child: IntrinsicHeight(//to do tych kolorowych paskó przy odpowiedziach żęby na całą wysokosc
+              child: IntrinsicHeight(//to do tych kolorowych pasków przy odpowiedziach żęby na całą wysokosc
                 child: Row(//to do ropoczecia tego kolorowego paska od góry każej odpowiedzi
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

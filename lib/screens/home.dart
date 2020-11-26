@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';//podstawowa paczka do fluttera
 import 'package:flutter_vote_app/vote_list.dart';
 import 'package:flutter_vote_app/vote_widget.dart';
 import 'package:provider/provider.dart';//paczka do providera
-import 'package:flutter_vote_app/models/vote.dart';
 import 'package:flutter_vote_app/state/vote.dart';
 
 /*

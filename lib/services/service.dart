@@ -5,6 +5,8 @@ import 'package:uuid/uuid.dart';
 List<Vote> getVoteList(){
   List<Vote> voteList = List<Vote>();
 
+
+  //na razie wpisywanie glosowania z reki
   voteList.add(
     Vote(
       voteId: Uuid().v4(),
