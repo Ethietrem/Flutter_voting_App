@@ -14,7 +14,7 @@ class AuthenticationState with ChangeNotifier{
   String _username;
   String _uid;
 
-  String get authStatus => _authStatus;//TODO tu jest problem daje null
+  String get authStatus => _authStatus;
   String get username => _username;
   String get uid => _uid;
 

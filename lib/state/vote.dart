@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vote_app/models/vote.dart';
-import 'file:///C:/Users/Mati/AndroidStudioProjects/flutter_vote_app/lib/services/service.dart';
+import 'package:flutter_vote_app/services/service.dart';
 
 class VoteState with ChangeNotifier{
   List<Vote> _voteList = List<Vote>();
@@ -8,13 +8,17 @@ class VoteState with ChangeNotifier{
   String _selectedOptionInActiveVote;
 
   //załadowanie listy dostępnych głosowań pobranych uprzednio w service.dart, async jest potrzebne do providera w home Future.microtask
-  void loadVoteList() async{
+  void loadVoteList(BuildContext context/*wczesniej tez tu nic nie bylo*/) async{
+    /*
+    to jest do stalych danych teraz jest zmiana jak baza danych
     _voteList = getVoteList();
-    notifyListeners();
+    notifyListeners();*/
+    getVoteListFromFirebase(context);
   }
 
   //wyczyszczenie stanu dla zmiennych
   void clearState(){
+    _voteList = null;
     _activeVote = null;
     _selectedOptionInActiveVote = null;
   }
@@ -22,6 +26,10 @@ class VoteState with ChangeNotifier{
   //notacja ze strzałką (=>) odpowiada wywołaniu jednolinijkowej funkcji
   //pobranie tu wartości i dodanie do prywatnych
   List <Vote> get voteList => _voteList;
+  set voteList(newValue) {
+    _voteList = newValue;
+    notifyListeners();
+  }
   Vote get activeVote => _activeVote;
   String get selectedOptionInActiveVote => _selectedOptionInActiveVote;
 

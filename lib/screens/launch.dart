@@ -10,10 +10,9 @@ import 'package:provider/provider.dart';//podstawowa paczka do fluttera
 class Launch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    gotoHomeScreen(context);
-
-    return Consumer<AuthenticationState>(//TODO tu problem z authStatus was called on null
+    return Consumer<AuthenticationState>(
       builder: (builder, authState, child){
+        gotoHomeScreen(context);
         return Container(//tu definiujemy poszczególne cechy danego screena
           width: 400,
           margin: EdgeInsets.all(20),
@@ -29,7 +28,7 @@ class Launch extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 37.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.lightBlue,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -57,7 +56,7 @@ class Launch extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          color: Colors.amberAccent,
+                          color: Colors.green,
                           child: Text(
                             "Zaloguj się",
                             style: TextStyle(
@@ -79,7 +78,7 @@ class Launch extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          color: Colors.amberAccent,
+                          color: Colors.green,
                           child: Text(
                             "Bez logowania",
                             style: TextStyle(
@@ -110,7 +109,6 @@ class Launch extends StatelessWidget {
 
   //funkcja do obsługi przycisku logowania, powoduje podmianę na nowe okno -> /home
   void signIn(BuildContext context, String service){
-    //Navigator.pushReplacementNamed(context, "/home");
     Provider.of<AuthenticationState>(context, listen: true).login(serviceName: service);
   }
 }

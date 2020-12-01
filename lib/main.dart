@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';//podstawowa paczka do fluttera
-import 'package:flutter_vote_app/state/authentication.dart';
+import 'package:flutter_vote_app/state/authentication.dart';//import paczki do sanu authenticate
+import 'package:flutter_vote_app/utilities.dart';//import dla przejścia między home scrren a login screen
 import 'package:provider/provider.dart';//import dla providera
 import 'package:flutter_vote_app/screens/home.dart';//import dla okna home
 import 'package:flutter_vote_app/screens/launch.dart';//import dla okna launch
@@ -19,10 +20,12 @@ class VotingApp extends StatelessWidget {
       //obsługa stanu przez providera
       providers: [
         ChangeNotifierProvider(
-          builder: (_) => VoteState(), create: (BuildContext context) {  },
+          //builder: (_) => VoteState(), create: (BuildContext context) {  },
+          create: (context) => VoteState(),
         ),
         ChangeNotifierProvider(
-          builder: (_) => AuthenticationState(), create: (BuildContext context) {  },
+          //builder: (_) => AuthenticationState(), create: (BuildContext context) {  },
+          create: (context) => AuthenticationState(),
         )
       ],
       child: MaterialApp(//tu budowana jest struktura apki, wstawiane są okna utworzone w screensach
@@ -31,7 +34,15 @@ class VotingApp extends StatelessWidget {
 
           //metoda Scaffold zapewnia ogólny układ widoku (górny pasek = appBar i reszta = body, poniżej
           "/": (context) => Scaffold(
-            body: Launch(),
+            body: DecoratedBox(
+              position: DecorationPosition.background,
+              decoration: BoxDecoration(
+              image: DecorationImage(
+              image: AssetImage('img.jpg'),
+              fit: BoxFit.cover),
+              ),
+              child: Launch(),
+            )
           ),
 
           "/home": (context) => Scaffold(
@@ -77,6 +88,7 @@ class VotingApp extends StatelessWidget {
         onSelected: (value){
           if(value == 1){
             Provider.of<AuthenticationState>(context, listen: false).logout();
+            gotoLoginScreen(context);
           }
         },
     );

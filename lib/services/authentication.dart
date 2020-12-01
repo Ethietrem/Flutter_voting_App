@@ -36,6 +36,7 @@ Future<bool> isUserSignedIn() async{
 //sprawdzenie czy wylogowany, ewentualnie daj blad
 void signOut(){
   try{
+    print("--> _auth.signOut()");
     _auth.signOut();
   }
   catch(error){

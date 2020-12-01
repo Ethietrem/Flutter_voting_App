@@ -15,7 +15,7 @@ void gotoHomeScreen(BuildContext context){
   });
 }
 
-void gotoLoginScreen(BuildContext context, AuthenticationState authState){
+void gotoLoginScreen(BuildContext context){
   Future.microtask(() {
     if(Provider.of<AuthenticationState>(context, listen: false).authStatus == null) {
       Navigator.pushReplacementNamed(context, '/');

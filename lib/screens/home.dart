@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';//podstawowa paczka do fluttera
+import 'package:flutter_vote_app/services/service.dart';
 import 'package:flutter_vote_app/vote_list.dart';
 import 'package:flutter_vote_app/vote_widget.dart';
 import 'package:provider/provider.dart';//paczka do providera
 import 'package:flutter_vote_app/state/vote.dart';
+import 'package:loading/loading.dart';//paczka do animacji ladowania
+import 'package:loading/indicator/ball_pulse_indicator.dart';
 
 /*
                 tu jest okno wyboru ankiety
@@ -23,7 +26,7 @@ class _HomeState extends State<Home> {
     //ladowanie glosow - tu to async z state/vote
     Future.microtask(() {
       Provider.of<VoteState>(context, listen: false).clearState();
-      Provider.of<VoteState>(context, listen: false).loadVoteList();
+      Provider.of<VoteState>(context, listen: false).loadVoteList(context);
     });
   }
 
@@ -32,60 +35,72 @@ class _HomeState extends State<Home> {
     return Container(
       child: Column(
         children: [
-          //jest to klasa rozszerzająca do elem podrzednych typu wiersz kolumna elestyczny??? w celu wypełnienia dostępnego miejsca
-          Expanded(
-            //to widget ułatwiający tworzenie formularzy / listy elementów itp.
-            child: Stepper(
-              type: StepperType.horizontal,
-              currentStep: _currentStep,
-              steps: [
-                getStep(
-                  title: "Choose",
-                  //wywołanie z vote_list.dart
-                  child: VoteListWidget(),
-                  isActive: true,
-                ),
-                getStep(
-                  title: "Vote",
-                  child: VoteWidget(),
-                  isActive: _currentStep == 1 ? true : false,
-                ),
-              ],
-
-              //po kliknięciu w przycisk kontynuacji zmiana licznika na 1
-              onStepContinue: (){
-                if (_currentStep == 0){
-                  if(step2Req()){
-                    setState(() {
-                      _currentStep = 1;
-                    });
-                  }
-                  else{
-                    showSnackBar(context, "Please select a vote first.");
-                  }
-                }
-                else if(_currentStep == 1){
-                  if(step3Req()){
-                    Navigator.pushReplacementNamed(context, "/result");
-                  }
-                  else{
-                    showSnackBar(context, "Please mark your vote!");
-                  }
-                }
-              },
-
-              //po kliknięciu w przycisk cancel zmiana licznika na 0
-              onStepCancel: (){
-                Provider.of<VoteState>(context).selectedOptionInActiveVote = null;
-                if(_currentStep <= 0){
-                  Provider.of<VoteState>(context).activeVote = null;
-                }
-                setState(() {
-                  _currentStep = 0;
-                });
-              },
+          //animacja wczytywania, jezeli lista pusta to pokaze sie animacja ladowania
+          if(Provider.of<VoteState>(context, listen: false).voteList == null)
+            Container(
+              color: Colors.lightBlue,
+              child: Center(
+                child: Loading(indicator: BallPulseIndicator(), size: 100.0),
+              ),
             ),
-          ),
+          if(Provider.of<VoteState>(context, listen: true).voteList != null)
+            //jest to klasa rozszerzająca do elem podrzednych typu wiersz kolumna elestyczny??? w celu wypełnienia dostępnego miejsca
+            Expanded(
+              //to widget ułatwiający tworzenie formularzy / listy elementów itp.
+              child: Stepper(
+                type: StepperType.horizontal,
+                currentStep: _currentStep,
+                steps: [
+                  getStep(
+                    title: "Choose",
+                    //wywołanie z vote_list.dart
+                    child: VoteListWidget(),
+                    isActive: true,
+                  ),
+                  getStep(
+                    title: "Vote",
+                    child: VoteWidget(),
+                    isActive: _currentStep == 1 ? true : false,
+                  ),
+                ],
+
+                //po kliknięciu w przycisk kontynuacji zmiana licznika na 1
+                onStepContinue: (){
+                  if (_currentStep == 0){
+                    if(step2Req()){
+                      setState(() {
+                        _currentStep = 1;
+                      });
+                    }
+                    else{
+                      showSnackBar(context, "Please select a vote first.");
+                    }
+                  }
+                  else if(_currentStep == 1){
+                    if(step3Req()){
+                      //oddanie glosu
+                      markMyVote();
+                      //przejscie do ekranu wynikow
+                      Navigator.pushReplacementNamed(context, "/result");
+                    }
+                    else{
+                      showSnackBar(context, "Please mark your vote!");
+                    }
+                  }
+                },
+
+                //po kliknięciu w przycisk cancel zmiana licznika na 0
+                onStepCancel: (){
+                  Provider.of<VoteState>(context).selectedOptionInActiveVote = null;
+                  if(_currentStep <= 0){
+                    Provider.of<VoteState>(context).activeVote = null;
+                  }
+                  setState(() {
+                    _currentStep = 0;
+                  });
+                },
+              ),
+            ),
         ],
       ),
     );
@@ -122,5 +137,12 @@ class _HomeState extends State<Home> {
       return false;
     }
     return true;
+  }
+
+  void markMyVote(){
+    final voteId = Provider.of<VoteState>(context, listen: false).activeVote.voteId;
+    final option = Provider.of<VoteState>(context, listen: false).selectedOptionInActiveVote;
+
+    markVote(voteId, option);//to jest w services/service.dart
   }
 }
